@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeWars.h,v 1.3 2000/12/02 19:13:28 tedly Exp $
+	$Id: Fuzz.h,v 1.1 2000/12/02 19:13:28 tedly Exp $
 	$Souce$
  
 	Description:
@@ -33,47 +33,51 @@
 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-	$Log: DopeWars.h,v $
-	Revision 1.3  2000/12/02 19:13:28  tedly
+	$Log: Fuzz.h,v $
+	Revision 1.1  2000/12/02 19:13:28  tedly
 	another small step
-	
-	Revision 1.2  2000/12/02 18:37:38  tedly
-	pretty reasonable checkpoint here. lets call it alpha.
 	
 
  
  ***************************************************************************/
 
-#ifndef dopewars_h_included
-#define dopewars_h_included
-  
 
-#define DOPE_TABLE_QUERY_SIZE		40
+#ifndef fuzz_h_included
+#define fuzz_h_included
 
-#define NUM_DRUGS					8
-#define NUM_GAME_DAYS				20
-#define INTEREST_PERCENTAGE			20
-#define COAT_FREQUENCY				10
-#define FLEE_SUCCESS_FREQUENCY		3
-#define BUSTED_FREQUENCY			5
-#define FUZZ_DOWNED_FREQUENCY		4
-#define FUZZ_ENCOUNTER_FREQUENCY	7
-
-#define INIT_CASH					5400
-#define INIT_DEBT					5400
-#define INIT_POCKETS				100
-#define INIT_COP_COUNT				3
-#define INIT_HAS_GUN				true // false
+#include <UI32.h>
+#include <OKDialog.h>
 
 
-#define MSG_NOT_ENOUGH_CASH		"Not enough cash!"
-#define MSG_NOT_HOLDING			"You aren't holding any!"
-#define MSG_NOT_ENOUGH_DOPE		"You don't have that much!"
-#define MSG_NOT_ENOUGH_POCKETS	"You don't have room!"
-#define MSG_NOTHING_SELECTED	"Nothing selected!"
-#define MSG_OK					"Done!"
-#define MSG_ASK_BUY_COAT		"Would you like to buy a coat with more pockets for $200?"
+#include "DopeWars.h"
+#include "DopeTable.h"
+#include "TransactionDialog.h"
 
 
-#endif // dopewars_h_included
+#define FUZZ_RUNFIGHT			"You smell bacon! What will you do?"
+#define FUZZ_STILL_AROUND		"They're still after you, what now?"
+#define FUZZ_KID_HAS_NO_GUN		"You need a gun to fight!"
+#define FUZZ_DOWN				"Officer down, you got one! Now what?"
+#define FUZZ_FINISHED			"You finished off the cops."
+#define FUZZ_KID_BUSTED			"Busted! You lose half you cash and all your dope."
 
+
+class Fuzz {
+
+    public:
+	static void checkForEncounter (UIEngine& uiEngine, DopeTable& dopeTable);
+	
+	enum {
+		RUN = 0,
+		FIGHT = 1,
+		BUSTED,
+		LOST_THEM,
+		FUZZ_GONE
+	};
+
+	protected:
+	static void displayMessage (UIEngine& uiEngine, char *msg);
+
+};
+
+#endif // fuzz_h_included

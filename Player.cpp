@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: Player.cpp,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: Player.cpp,v 1.3 2000/12/02 19:13:29 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: Player.cpp,v $
+	Revision 1.3  2000/12/02 19:13:29  tedly
+	another small step
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -159,8 +162,9 @@ void Player::doRandomStuff () {
 		doCoatCheck();
 	}
 
-	Fuzz::checkForEncounter(m_uiEngine, m_dopeTable);
-
+	if ( ! (rand() % FUZZ_ENCOUNTER_FREQUENCY) ) {
+		Fuzz::checkForEncounter(m_uiEngine, m_dopeTable);
+	}
 }
 
 void Player::doEndOfGame () {
