@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: SavingsAndLoans.cpp,v 1.3 2001/01/07 17:57:41 tedly Exp $
+	$Id: SavingsAndLoans.cpp,v 1.4 2001/03/22 07:47:30 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: SavingsAndLoans.cpp,v $
+	Revision 1.4  2001/03/22 07:47:30  tedly
+	fixed bug which prevented repaying debts
+	
 	Revision 1.3  2001/01/07 17:57:41  tedly
 	moving the banking stuff around to avoid asking redundant quesstions
 	
@@ -119,7 +122,7 @@ void SavingsAndLoans::handleSharkVisit (TransactionDialog& transDialog,
 	int borrow = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT, 
 											SNL_BORROW, 
 											suggestedQty);
-	if ( borrow >= 0 ) {
+	if ( borrow > 0 ) {
 		dopeTable.handleLoan (borrow);
 		return;
 	}
@@ -128,7 +131,7 @@ void SavingsAndLoans::handleSharkVisit (TransactionDialog& transDialog,
 	int repay = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT, 
 										 SNL_REPAY, 
 										 suggestedQty);
-	if ( repay >= 0 ) {
+	if ( repay > 0 ) {
 		if ( repay > curCash ) {
 			transDialog.warn (MSG_NOT_ENOUGH_CASH);
 		} else {		
