@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeTable.h,v 1.3 2001/01/11 06:32:56 tedly Exp $
+	$Id: DopeTable.h,v 1.4 2001/01/18 06:30:31 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeTable.h,v $
+	Revision 1.4  2001/01/18 06:30:31  tedly
+	fixed a problem where random stuff failed to affect drugs which were not available
+	
 	Revision 1.3  2001/01/11 06:32:56  tedly
 	got rid of awful div by zero bug by preventing folks from buying unavailable drugs.
 	
@@ -193,6 +196,8 @@ class DopeTable : public Table {
 		void writeCacheValue (int row, int col, int value);
 		void writeCacheValue (int row, int col, 
 							  char *format, int value1, int value2);
+		void computeNewPriceForDrug (int drug);
+
 		
 		int m_prices [NUM_DRUGS];
 		int m_holdings [NUM_DRUGS];	

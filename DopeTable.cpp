@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeTable.cpp,v 1.4 2001/01/11 06:32:56 tedly Exp $
+	$Id: DopeTable.cpp,v 1.5 2001/01/18 06:30:31 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeTable.cpp,v $
+	Revision 1.5  2001/01/18 06:30:31  tedly
+	fixed a problem where random stuff failed to affect drugs which were not available
+	
 	Revision 1.4  2001/01/11 06:32:56  tedly
 	got rid of awful div by zero bug by preventing folks from buying unavailable drugs.
 	
@@ -156,13 +159,20 @@ void DopeTable::writePlayerColumnToCache () {
 						"%d/%d", m_totalHoldings, m_pockets );
 }
 
+
+void DopeTable::computeNewPriceForDrug (int drug) {
+
+	int newPrice = drugList[drug].baseCost;
+	newPrice += rand () % drugList[drug].variance;
+	m_prices[drug] = newPrice;
+	writeCacheValue ( drug, PRICE_COLUMN, newPrice);
+}
+
+
 void DopeTable::setPrices () {
 
 	for (int i=0; i< NUM_DRUGS; i++) {
-		int newPrice = drugList[i].baseCost;
-		newPrice += rand () % drugList[i].variance;
-		m_prices[i] = newPrice;
-		writeCacheValue ( i, PRICE_COLUMN, newPrice);
+		computeNewPriceForDrug (i);
 	}
 
 	for (i = 0; i < NUM_DRUGS_TO_LEAVE_OUT; i++) {
@@ -205,6 +215,11 @@ char *DopeTable::handleRandomStuff (int idx) {
 
 	// first the random stuff which affects price	
 	if ( drugMessages[idx].plus > 0) {
+		
+		// start from a new value, this covers the chance 
+		// this drug wasn't available this round anyway.
+		computeNewPriceForDrug (drug);
+
 		int newPrice = m_prices [drug] * drugMessages[idx].plus;
 		m_prices [drug] = newPrice;
 		writeCacheValue ( drug, PRICE_COLUMN, newPrice);
