@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: SavingsAndLoans.h,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: SavingsAndLoans.h,v 1.3 2001/01/07 17:57:41 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: SavingsAndLoans.h,v $
+	Revision 1.3  2001/01/07 17:57:41  tedly
+	moving the banking stuff around to avoid asking redundant quesstions
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -67,6 +70,9 @@ class SavingsAndLoans {
 	static void checkForBanking (UIEngine& uiEngine, DopeTable& dopeTable);
 
 	protected:
+	static void handleBankVisit (TransactionDialog& td, DopeTable& dt);
+	static void handleSharkVisit (TransactionDialog& td, DopeTable& dt);
+
 
 };
 

@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: TransactionDialog.cpp,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: TransactionDialog.cpp,v 1.3 2001/01/07 17:57:41 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: TransactionDialog.cpp,v $
+	Revision 1.3  2001/01/07 17:57:41  tedly
+	moving the banking stuff around to avoid asking redundant quesstions
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -43,6 +46,8 @@
 
 
 #include "TransactionDialog.h"
+
+#include "OKDialog.h"
 
 int TransactionDialog::getQuantity (char *queryStr, 
 									char *verb, 
@@ -116,7 +121,7 @@ int TransactionDialog::handleInput (Field& control, bool required) {
 					if ( !required ) {
 						checkAgain = false;
 					} 					
-				} 
+				}
                break;		 								
         }
 		m_uiEngine.ProcessDialog(m_dialog);	
@@ -125,3 +130,18 @@ int TransactionDialog::handleInput (Field& control, bool required) {
 	m_uiEngine.ClearDialog();	
 	return qty;
 }
+
+void TransactionDialog::warn (char *str) {
+
+	OKDialog warnDialog (str);
+	warnDialog.Go(m_uiEngine);
+}
+
+
+void TransactionDialog::clearEditBuffer (Edit& edit) {
+
+	int curValueSize = edit.GetStringLength ();
+	edit.SetSelection (0, curValueSize);
+	edit.ReplaceSelection ("");
+}
+		

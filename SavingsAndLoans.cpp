@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: SavingsAndLoans.cpp,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: SavingsAndLoans.cpp,v 1.3 2001/01/07 17:57:41 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: SavingsAndLoans.cpp,v $
+	Revision 1.3  2001/01/07 17:57:41  tedly
+	moving the banking stuff around to avoid asking redundant quesstions
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -48,6 +51,7 @@
 #include "SavingsAndLoans.h"
 
 
+
 void SavingsAndLoans::checkForBanking (UIEngine& uiEngine, 
 									  DopeTable& dopeTable) {
 	YesNoDialog visitQuery;
@@ -55,28 +59,7 @@ void SavingsAndLoans::checkForBanking (UIEngine& uiEngine,
 
 	visitQuery.SetQuestion (SNL_VISIT_LOANSHARK);
 	if ( visitQuery.Go(uiEngine) == YesNoDialog::ITEM_YES ) {
-
-		int curCash = dopeTable.getCash();
-		int curDebt = dopeTable.getDebt();
-		int suggestedQty;
-
-		int borrow = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT, SNL_BORROW);
-		if ( borrow >= 0 ) {
-			dopeTable.handleLoan (borrow);
-		}
-
-		suggestedQty = (curCash > curDebt) ? curDebt : curCash;
-		int repay = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT, 
-											 SNL_REPAY, 
-											 suggestedQty);
-		if ( repay >= 0 ) {
-			if ( repay > curCash ) {
-				OKDialog notEnoughCash (MSG_NOT_ENOUGH_CASH);
-				notEnoughCash.Go(uiEngine);
-			} else {		
-				dopeTable.handleLoan (-repay);
-			}
-		}
+		handleSharkVisit (transDialog, dopeTable);
 	}
 
 	/** now handle bank visits if the player has any cash on hand or in the bank. **/
@@ -89,28 +72,69 @@ void SavingsAndLoans::checkForBanking (UIEngine& uiEngine,
 		
 	visitQuery.SetQuestion (SNL_VISIT_BANK);
 	if ( visitQuery.Go(uiEngine) == YesNoDialog::ITEM_YES ) {
-		
-		int deposit = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT,
-											   SNL_DEPOSIT,
-											   curCash);
-		if ( deposit >= 0 ) {
-			if ( deposit > curCash ) {
-				deposit = curCash;
-			}
-			dopeTable.handleDeposit(deposit);
-		}
-
-
-		curSavings = dopeTable.getSavings();
-		int withdraw = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT,
-												SNL_WITHDRAW,
-											    curSavings);
-		if ( withdraw >= 0 ) {
-			if ( withdraw > curSavings ) {
-				withdraw = curSavings;
-			}
-			dopeTable.handleDeposit(-curSavings);
-		}
-	} // end of handling banking
+		handleBankVisit ( transDialog, dopeTable);		
+	} 
 
 }
+
+
+
+
+void SavingsAndLoans::handleBankVisit (TransactionDialog& transDialog, 
+										DopeTable& dopeTable) {
+
+	int curCash = dopeTable.getCash();	
+	int deposit = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT,
+										   SNL_DEPOSIT,
+										   curCash);
+	if ( deposit >= 0 ) {
+		if ( deposit > curCash ) {
+			deposit = curCash;
+		}
+		dopeTable.handleDeposit(deposit);
+		return;
+	}
+
+	int curSavings = dopeTable.getSavings();
+	int withdraw = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT,
+											SNL_WITHDRAW,
+											curSavings);
+	if ( withdraw >= 0 ) {
+		if ( withdraw > curSavings ) {
+			withdraw = curSavings;
+		}
+		dopeTable.handleDeposit(-curSavings);
+	}
+
+}
+
+
+void SavingsAndLoans::handleSharkVisit (TransactionDialog& transDialog, 
+										DopeTable& dopeTable) {
+
+	int curCash = dopeTable.getCash();
+	int curDebt = dopeTable.getDebt();
+	int suggestedQty = 0;
+
+	int borrow = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT, 
+											SNL_BORROW, 
+											suggestedQty);
+	if ( borrow >= 0 ) {
+		dopeTable.handleLoan (borrow);
+		return;
+	}
+
+	suggestedQty = (curCash > curDebt) ? curDebt : curCash;
+	int repay = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT, 
+										 SNL_REPAY, 
+										 suggestedQty);
+	if ( repay >= 0 ) {
+		if ( repay > curCash ) {
+			transDialog.warn (MSG_NOT_ENOUGH_CASH);
+		} else {		
+			dopeTable.handleLoan (-repay);
+		}
+	}
+
+}
+

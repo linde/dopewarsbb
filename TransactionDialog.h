@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: TransactionDialog.h,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: TransactionDialog.h,v 1.3 2001/01/07 17:57:41 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: TransactionDialog.h,v $
+	Revision 1.3  2001/01/07 17:57:41  tedly
+	moving the banking stuff around to avoid asking redundant quesstions
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -75,9 +78,12 @@ class TransactionDialog {
 							int defaultIndex=0,
 							bool required = false);
 
+		void warn (char *str);
+
     protected:
 
-		int handleInput (Field& control, bool required);
+		int handleInput (Field& control, bool required);		
+		void clearEditBuffer (Edit& edit);
 		
 		UIEngine&	m_uiEngine;
 		Dialog		m_dialog;
