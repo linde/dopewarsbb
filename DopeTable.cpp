@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeTable.cpp,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: DopeTable.cpp,v 1.3 2001/01/07 21:00:56 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeTable.cpp,v $
+	Revision 1.3  2001/01/07 21:00:56  tedly
+	now leave out a few drugs like the original ...
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -83,7 +86,7 @@ DopeTable::DopeTable (TransactionDialog& transDialog)
 
 
 void DopeTable::writeCacheValue (int row, int col, int value) {
-	writeCacheValue(row, col, "%d", value, 0);
+	writeCacheValue(row, col, "%ld", value, 0);
 }
 
 
@@ -152,12 +155,19 @@ void DopeTable::writePlayerColumnToCache () {
 
 void DopeTable::setPrices () {
 
-	for (int i=0; i<NUM_DRUGS; i++) {
+	for (int i=0; i< NUM_DRUGS; i++) {
 		int newPrice = drugList[i].baseCost;
 		newPrice += rand () % drugList[i].variance;
 		m_prices[i] = newPrice;
 		writeCacheValue ( i, PRICE_COLUMN, newPrice);
 	}
+
+	for (i = 0; i < NUM_DRUGS_TO_LEAVE_OUT; i++) {
+		int drugToLeaveOut = rand () % NUM_DRUGS;
+		m_prices [drugToLeaveOut] = 0;
+		writeCacheValue ( drugToLeaveOut, PRICE_COLUMN, 0);
+	}
+
 }
 
 	

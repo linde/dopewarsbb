@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeWars.h,v 1.3 2000/12/02 19:13:28 tedly Exp $
+	$Id: DopeWars.h,v 1.4 2001/01/07 21:00:56 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeWars.h,v $
+	Revision 1.4  2001/01/07 21:00:56  tedly
+	now leave out a few drugs like the original ...
+	
 	Revision 1.3  2000/12/02 19:13:28  tedly
 	another small step
 	
@@ -52,6 +55,7 @@
 
 #define NUM_DRUGS					8
 #define NUM_GAME_DAYS				20
+#define NUM_DRUGS_TO_LEAVE_OUT		3
 #define INTEREST_PERCENTAGE			20
 #define COAT_FREQUENCY				10
 #define FLEE_SUCCESS_FREQUENCY		3
