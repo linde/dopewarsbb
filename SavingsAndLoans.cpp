@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: SavingsAndLoans.cpp,v 1.1 2000/12/01 01:15:56 tedly Exp $
+	$Id: SavingsAndLoans.cpp,v 1.2 2000/12/02 18:37:38 tedly Exp $
 	$Souce$
  
 	Description:
@@ -10,6 +10,10 @@
 
 	Copyright (c) 2000 Monkeypants.com
 
+	Thanks to Matt Lee for his work porting	Dope Wars to the Palm. This
+	RIM version borrows a lot from his addictive, but straight-forward 
+	verion of the game.
+
 	Permission is hereby granted, free of charge, to any person obtaining a 
 	copy of this software and associated documentation files (the "Software"), 
 	to deal in the Software without restriction, including without limitation 
@@ -17,8 +21,9 @@
 	and/or sell copies of the Software, and to permit persons to whom the 
 	Software is furnished to do so, subject to the following conditions:
 
-	The above copyright notice and this permission notice shall be included 
-	in all copies or substantial portions of the Software.
+	The above copyright notice, acknowledgment of Matt Lee's original
+	contribution, and this permission notice shall be included in all copies 
+	or substantial portions of the Software.
 
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
 	EXPRESS	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
@@ -29,8 +34,8 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: SavingsAndLoans.cpp,v $
-	Revision 1.1  2000/12/01 01:15:56  tedly
-	baseline very pre-alpha version ...
+	Revision 1.2  2000/12/02 18:37:38  tedly
+	pretty reasonable checkpoint here. lets call it alpha.
 	
 
  
@@ -55,14 +60,14 @@ void SavingsAndLoans::checkForBanking (UIEngine& uiEngine,
 		int curDebt = dopeTable.getDebt();
 		int suggestedQty;
 
-		int borrow = transDialog.getQuantity (SNL_BORROW, SNL_HOW_MUCH_FORMAT);
+		int borrow = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT, SNL_BORROW);
 		if ( borrow >= 0 ) {
 			dopeTable.handleLoan (borrow);
 		}
 
 		suggestedQty = (curCash > curDebt) ? curDebt : curCash;
-		int repay = transDialog.getQuantity (SNL_REPAY, 
-											 SNL_HOW_MUCH_FORMAT, 
+		int repay = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT, 
+											 SNL_REPAY, 
 											 suggestedQty);
 		if ( repay >= 0 ) {
 			if ( repay > curCash ) {
@@ -85,8 +90,8 @@ void SavingsAndLoans::checkForBanking (UIEngine& uiEngine,
 	visitQuery.SetQuestion (SNL_VISIT_BANK);
 	if ( visitQuery.Go(uiEngine) == YesNoDialog::ITEM_YES ) {
 		
-		int deposit = transDialog.getQuantity (SNL_DEPOSIT, 
-											   SNL_HOW_MUCH_FORMAT, 
+		int deposit = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT,
+											   SNL_DEPOSIT,
 											   curCash);
 		if ( deposit >= 0 ) {
 			if ( deposit > curCash ) {
@@ -97,8 +102,8 @@ void SavingsAndLoans::checkForBanking (UIEngine& uiEngine,
 
 
 		curSavings = dopeTable.getSavings();
-		int withdraw = transDialog.getQuantity (SNL_WITHDRAW, 
-											    SNL_HOW_MUCH_FORMAT, 
+		int withdraw = transDialog.getQuantity (SNL_HOW_MUCH_FORMAT,
+												SNL_WITHDRAW,
 											    curSavings);
 		if ( withdraw >= 0 ) {
 			if ( withdraw > curSavings ) {

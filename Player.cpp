@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: Player.cpp,v 1.1 2000/12/01 01:15:56 tedly Exp $
+	$Id: Player.cpp,v 1.2 2000/12/02 18:37:38 tedly Exp $
 	$Souce$
  
 	Description:
@@ -10,6 +10,10 @@
 
 	Copyright (c) 2000 Monkeypants.com
 
+	Thanks to Matt Lee for his work porting	Dope Wars to the Palm. This
+	RIM version borrows a lot from his addictive, but straight-forward 
+	verion of the game.
+
 	Permission is hereby granted, free of charge, to any person obtaining a 
 	copy of this software and associated documentation files (the "Software"), 
 	to deal in the Software without restriction, including without limitation 
@@ -17,8 +21,9 @@
 	and/or sell copies of the Software, and to permit persons to whom the 
 	Software is furnished to do so, subject to the following conditions:
 
-	The above copyright notice and this permission notice shall be included 
-	in all copies or substantial portions of the Software.
+	The above copyright notice, acknowledgment of Matt Lee's original
+	contribution, and this permission notice shall be included in all copies 
+	or substantial portions of the Software.
 
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
 	EXPRESS	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
@@ -29,8 +34,8 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: Player.cpp,v $
-	Revision 1.1  2000/12/01 01:15:56  tedly
-	baseline very pre-alpha version ...
+	Revision 1.2  2000/12/02 18:37:38  tedly
+	pretty reasonable checkpoint here. lets call it alpha.
 	
 
  
@@ -42,6 +47,7 @@
 
 #include "Player.h"
 #include "SavingsAndLoans.h"
+#include "Fuzz.h"
 
 
 void Player::doExchange (boolean buy) {
@@ -127,7 +133,13 @@ int Player::doJet (const char *destName) {
 	m_dopeTable.compoundDebt();
 	doRandomStuff();
 
-	SavingsAndLoans::checkForBanking (m_uiEngine, m_dopeTable);
+	// if we're not just starting and are in the top city, check to
+	// see if the player would like to visit the loan shark or bank.
+	if ( m_daysLeft < (NUM_GAME_DAYS - 1) &&
+		 !strcmp (m_curLocation, DopeMenu::getStartLocation() ) )
+	{
+		SavingsAndLoans::checkForBanking (m_uiEngine, m_dopeTable);
+	}
 
 	return CONTINUE;
 }
@@ -142,6 +154,13 @@ void Player::doRandomStuff () {
 			alert.Go( m_uiEngine );
 		}
 	}
+
+	if ( ! (rand() % COAT_FREQUENCY) ) {
+		doCoatCheck();
+	}
+
+	Fuzz::checkForEncounter(m_uiEngine, m_dopeTable);
+
 }
 
 void Player::doEndOfGame () {
@@ -152,6 +171,20 @@ void Player::doEndOfGame () {
 
 	RimSprintf(displayMsg, sizeof(displayMsg), gameEndMsg, networth);
 	displayMessage(displayMsg);
+}
+
+void Player::doCoatCheck () {
+
+	if ( m_dopeTable.getCash() < 200 ) {
+		return;
+	}
+
+	YesNoDialog coatQuery (MSG_ASK_BUY_COAT);
+	if ( coatQuery.Go(m_uiEngine) == YesNoDialog::ITEM_YES ) {
+		m_dopeTable.adjustCash(-200);
+		m_dopeTable.adjustPockets(40);
+	}
 
 }
+		
 

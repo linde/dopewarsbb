@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeTable.cpp,v 1.1 2000/12/01 01:15:56 tedly Exp $
+	$Id: DopeTable.cpp,v 1.2 2000/12/02 18:37:38 tedly Exp $
 	$Souce$
  
 	Description:
@@ -10,6 +10,10 @@
 
 	Copyright (c) 2000 Monkeypants.com
 
+	Thanks to Matt Lee for his work porting	Dope Wars to the Palm. This
+	RIM version borrows a lot from his addictive, but straight-forward 
+	verion of the game.
+
 	Permission is hereby granted, free of charge, to any person obtaining a 
 	copy of this software and associated documentation files (the "Software"), 
 	to deal in the Software without restriction, including without limitation 
@@ -17,8 +21,9 @@
 	and/or sell copies of the Software, and to permit persons to whom the 
 	Software is furnished to do so, subject to the following conditions:
 
-	The above copyright notice and this permission notice shall be included 
-	in all copies or substantial portions of the Software.
+	The above copyright notice, acknowledgment of Matt Lee's original
+	contribution, and this permission notice shall be included in all copies 
+	or substantial portions of the Software.
 
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
 	EXPRESS	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
@@ -29,8 +34,8 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeTable.cpp,v $
-	Revision 1.1  2000/12/01 01:15:56  tedly
-	baseline very pre-alpha version ...
+	Revision 1.2  2000/12/02 18:37:38  tedly
+	pretty reasonable checkpoint here. lets call it alpha.
 	
 
  
@@ -48,7 +53,8 @@ DopeTable::DopeTable (TransactionDialog& transDialog)
 		m_debt ( INIT_DEBT ),
 		m_savings ( 0 ),
 		m_pockets ( INIT_POCKETS ),
-		m_hasGun (false)
+		m_hasGun ( INIT_HAS_GUN ),
+		m_copCount ( INIT_COP_COUNT )
 {
 	// SetTableStructure (3, NUM_DRUGS, DEF_COLUMN_WIDTH * 4/3);
 	SetTableStructure (4, NUM_DRUGS, DEF_COLUMN_WIDTH);
@@ -106,6 +112,12 @@ int DopeTable::updateQuantity (boolean buy, int qty, int drug) {
 	return m_holdings [drug];
 }
 
+void DopeTable::handleBusted () { 
+	m_cash /= 2;
+	clearHoldings ();	// this calls writePlayerColumnToCache
+	writePlayerColumnToCache();
+}
+
 void DopeTable::handleLoan (int amt) { 
 	m_debt += amt;
 	m_cash += amt;
@@ -117,7 +129,11 @@ void DopeTable::handleDeposit (int amt) {
 	m_cash -= amt;
 	writePlayerColumnToCache();
 }
-		
+
+void DopeTable::adjustCash (int add) { 
+	m_cash += add; 
+	writePlayerColumnToCache();
+}	
 		
 void DopeTable::adjustPockets (int add) { 
 	m_pockets += add; 
@@ -221,7 +237,7 @@ char *DopeTable::handleExchange (boolean buy) {
 	} 
 
 	char *verb = buy ? "Buy" : "Sell";
-	int qty = m_transDialog.getQuantity (verb, queryStr, suggestedQty);
+	int qty = m_transDialog.getQuantity (queryStr, verb, suggestedQty);
 	if ( qty < 1 ) {
 		return NULL;
 	} 

@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeTable.h,v 1.1 2000/12/01 01:15:56 tedly Exp $
+	$Id: DopeTable.h,v 1.2 2000/12/02 18:37:38 tedly Exp $
 	$Souce$
  
 	Description:
@@ -10,6 +10,10 @@
 
 	Copyright (c) 2000 Monkeypants.com
 
+	Thanks to Matt Lee for his work porting	Dope Wars to the Palm. This
+	RIM version borrows a lot from his addictive, but straight-forward 
+	verion of the game.
+
 	Permission is hereby granted, free of charge, to any person obtaining a 
 	copy of this software and associated documentation files (the "Software"), 
 	to deal in the Software without restriction, including without limitation 
@@ -17,8 +21,9 @@
 	and/or sell copies of the Software, and to permit persons to whom the 
 	Software is furnished to do so, subject to the following conditions:
 
-	The above copyright notice and this permission notice shall be included 
-	in all copies or substantial portions of the Software.
+	The above copyright notice, acknowledgment of Matt Lee's original
+	contribution, and this permission notice shall be included in all copies 
+	or substantial portions of the Software.
 
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
 	EXPRESS	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
@@ -29,8 +34,8 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeTable.h,v $
-	Revision 1.1  2000/12/01 01:15:56  tedly
-	baseline very pre-alpha version ...
+	Revision 1.2  2000/12/02 18:37:38  tedly
+	pretty reasonable checkpoint here. lets call it alpha.
 	
 
  
@@ -134,15 +139,23 @@ class DopeTable : public Table {
 		char *handleGameEnd ();
 		void handleLoan (int amt);
 		void handleDeposit (int amt);
+		void handleBusted ();
+
 
 		void adjustDrugPrice (int idx);
 		int updateQuantity (boolean buy, int qty, int drug);
 		int updateQuantity (boolean buy, int qty);	
 		void adjustPockets (int add);
+		void adjustCash (int add);
+		
+		// this adjust can be inline b/c we dont need 
+		// to update the cache for this.
+		inline void adjustCopCount (int add) { m_copCount += add; }
 		
 		void setPrices ();
 
 
+		inline int getCopCount () { return m_copCount; }
 		inline int getCash () { return m_cash; }
 		inline int getDebt () { return m_debt; }
 		inline int getSavings () { return m_savings; }
@@ -188,6 +201,7 @@ class DopeTable : public Table {
 		int m_holdings [NUM_DRUGS];	
 		int m_totalHoldings;		// sum of m_holdings
 
+		int m_copCount;
 		int m_cash;
 		int m_debt;
 		int m_savings;
