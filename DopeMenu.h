@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeMenu.h,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: DopeMenu.h,v 1.3 2001/06/17 21:35:18 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeMenu.h,v $
+	Revision 1.3  2001/06/17 21:35:18  tedly
+	some minor stuff
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -47,7 +50,7 @@
 
 #include "MenuMgr.h"
 
-static int const			NUM_CHOICE_MENU_ITEMS = 12;
+static int const			NUM_CHOICE_MENU_ITEMS = 13;
 static char const * const	MENU_SEPARATOR_BAR = "__";
 static int					MIN_CITY_INDEX = 4;
 static int					MAX_CITY_INDEX = 9;
@@ -65,7 +68,8 @@ char const * const sampleChoiceMenuItems[ NUM_CHOICE_MENU_ITEMS ] = {
 							"Coney Island",		// 8
 							"Brooklyn",			// 9
 							MENU_SEPARATOR_BAR,
-					        "Close"				// 11
+							"About",			// 11
+					        "Close"				// 12
 };
 
 class DopeMenu : public MenuMgr {
@@ -89,8 +93,12 @@ class DopeMenu : public MenuMgr {
 			return ( idx == 2 );
 		}		
 
-		inline static boolean menuSelectionWasClose (int idx) { 
+		inline static boolean menuSelectionWasAbout (int idx) { 
 			return ( idx == 11 );
+		}		
+
+		inline static boolean menuSelectionWasClose (int idx) { 
+			return ( idx == 12 );
 		}		
 
 		inline static char const * const getLocationForIndex (int idx) {

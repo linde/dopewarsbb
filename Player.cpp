@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: Player.cpp,v 1.3 2000/12/02 19:13:29 tedly Exp $
+	$Id: Player.cpp,v 1.4 2001/06/17 21:35:18 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: Player.cpp,v $
+	Revision 1.4  2001/06/17 21:35:18  tedly
+	some minor stuff
+	
 	Revision 1.3  2000/12/02 19:13:29  tedly
 	another small step
 	
@@ -90,6 +93,10 @@ int Player::doMenuSelection(int menuSelection) {
 	} else if ( DopeMenu::menuSelectionWasSell(menuSelection) ) {
 
 		doExchange (false); 	
+
+	} 	else if ( DopeMenu::menuSelectionWasAbout(menuSelection) ) {
+
+		doAboutDopeWars (); 	
 
 	} else if ( DopeMenu::menuSelectionWasClose(menuSelection) ) {
 		// might want to consider saving game?

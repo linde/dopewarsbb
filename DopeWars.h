@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeWars.h,v 1.5 2001/01/11 06:32:56 tedly Exp $
+	$Id: DopeWars.h,v 1.6 2001/06/17 21:35:18 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeWars.h,v $
+	Revision 1.6  2001/06/17 21:35:18  tedly
+	some minor stuff
+	
 	Revision 1.5  2001/01/11 06:32:56  tedly
 	got rid of awful div by zero bug by preventing folks from buying unavailable drugs.
 	
@@ -87,7 +90,7 @@
 #define MSG_GAMEEND_HALFBAD		"Congratulations! You didn't do half bad with %d.";
 #define MSG_GAMEEND_NOMONEY		"You didn't make any money! You only had %d.";
 
-
+#define MSG_DOPEWARS_VERSION	"dopewarsbb\nbeta_04"
 
 
 #endif // dopewars_h_included

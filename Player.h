@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: Player.h,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: Player.h,v 1.3 2001/06/17 21:35:18 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: Player.h,v $
+	Revision 1.3  2001/06/17 21:35:18  tedly
+	some minor stuff
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -66,6 +69,8 @@ class Player {
 		bool confirmGameEnd ();
 		void setCurrentLocation (const char* loc);
 		int doMenuSelection(int menuSelection);
+
+		inline void Player::doAboutDopeWars () { displayMessage(MSG_DOPEWARS_VERSION); };
 
 		inline const char *getGameTitle () { return m_gameTitle; }		
 		
