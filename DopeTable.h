@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeTable.h,v 1.2 2000/12/02 18:37:38 tedly Exp $
+	$Id: DopeTable.h,v 1.3 2001/01/11 06:32:56 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeTable.h,v $
+	Revision 1.3  2001/01/11 06:32:56  tedly
+	got rid of awful div by zero bug by preventing folks from buying unavailable drugs.
+	
 	Revision 1.2  2000/12/02 18:37:38  tedly
 	pretty reasonable checkpoint here. lets call it alpha.
 	
@@ -58,12 +61,6 @@
 #define LABEL_DEBT				"Debt:"
 #define LABEL_SAVINGS			"Savings:"
 #define LABEL_COAT				"Coat:"
-
-
-#define GAMEEND_LOAN_SHARK_MSG	"The Loan Shark's thugs broke your legs.";
-#define GAMEEND_RETIRED_MSG		"You retired a millionaire in the Carribbean with %d.";
-#define GAMEEND_HALFBAD_MSG		"Congratulations! You didn't do half bad with %d.";
-#define GAMEEND_NOMONEY_MSG		"You didn't make any money! You only had %d.";
 
 
 typedef struct DrugType {

@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeWars.h,v 1.4 2001/01/07 21:00:56 tedly Exp $
+	$Id: DopeWars.h,v 1.5 2001/01/11 06:32:56 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeWars.h,v $
+	Revision 1.5  2001/01/11 06:32:56  tedly
+	got rid of awful div by zero bug by preventing folks from buying unavailable drugs.
+	
 	Revision 1.4  2001/01/07 21:00:56  tedly
 	now leave out a few drugs like the original ...
 	
@@ -74,9 +77,17 @@
 #define MSG_NOT_HOLDING			"You aren't holding any!"
 #define MSG_NOT_ENOUGH_DOPE		"You don't have that much!"
 #define MSG_NOT_ENOUGH_POCKETS	"You don't have room!"
+#define MSG_DRUG_NOT_AVAILABLE	"That drug's not available here!"
 #define MSG_NOTHING_SELECTED	"Nothing selected!"
 #define MSG_OK					"Done!"
 #define MSG_ASK_BUY_COAT		"Would you like to buy a coat with more pockets for $200?"
+
+#define MSG_GAMEEND_LOAN_SHARK	"The Loan Shark's thugs broke your legs.";
+#define MSG_GAMEEND_RETIRED		"You retired a millionaire in the Carribbean with %d.";
+#define MSG_GAMEEND_HALFBAD		"Congratulations! You didn't do half bad with %d.";
+#define MSG_GAMEEND_NOMONEY		"You didn't make any money! You only had %d.";
+
+
 
 
 #endif // dopewars_h_included

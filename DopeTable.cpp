@@ -1,7 +1,7 @@
 
 /****************************************************************************
 
-	$Id: DopeTable.cpp,v 1.3 2001/01/07 21:00:56 tedly Exp $
+	$Id: DopeTable.cpp,v 1.4 2001/01/11 06:32:56 tedly Exp $
 	$Souce$
  
 	Description:
@@ -34,6 +34,9 @@
 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	$Log: DopeTable.cpp,v $
+	Revision 1.4  2001/01/11 06:32:56  tedly
+	got rid of awful div by zero bug by preventing folks from buying unavailable drugs.
+	
 	Revision 1.3  2001/01/07 21:00:56  tedly
 	now leave out a few drugs like the original ...
 	
@@ -239,6 +242,15 @@ char *DopeTable::handleExchange (boolean buy) {
 	int price = m_prices[drug];
 	int holdings = m_holdings[drug];	
 
+	// dont let someone buy an unavailable drug, 
+	// i.e. one that has a zero price
+
+	if ( buy && price < 1 ) {
+		return MSG_DRUG_NOT_AVAILABLE;
+	} 
+
+
+	
 	int suggestedQty = buy ? (m_cash/price) : holdings;	
 	if (buy && suggestedQty < 1) {
 		return MSG_NOT_ENOUGH_CASH;
@@ -276,14 +288,14 @@ char *DopeTable::handleGameEnd () {
 	int netWorth = getNetWorth();
 	
 	if ( m_debt > 0 ) {
-		return GAMEEND_LOAN_SHARK_MSG;
+		return MSG_GAMEEND_LOAN_SHARK;
 	} else if ( netWorth > 1000000 ) {
-		return GAMEEND_RETIRED_MSG;
+		return MSG_GAMEEND_RETIRED;
 	} else if ( netWorth > 2000 ) {
-		return GAMEEND_HALFBAD_MSG;
+		return MSG_GAMEEND_HALFBAD;
 	} 
 	
-	return GAMEEND_NOMONEY_MSG;
+	return MSG_GAMEEND_NOMONEY;
 }
 
 
